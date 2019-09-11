@@ -20,6 +20,7 @@ class Board extends React.Component {
   renderSquare(i) {
     return (
       <Square
+        key={i}
         isCurrentMove={i === this.props.history.slice(-1)[0].ind}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
@@ -30,21 +31,15 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+      {
+        Array(3).fill().map((_, i) => {
+          return <div className="board-row" key={i}>
+            {
+              Array(3).fill().map((_, j) => this.renderSquare(3 * i + j))
+            }
+          </div>
+        })
+      }
       </div>
     );
   }
@@ -100,7 +95,9 @@ class Game extends React.Component {
         'Go to game start';
       return (
         <li key={move}>
-          {move === 0 ? '' : <span>row: {step.row}, col: {step.col}</span>}
+          <div>
+            {move === 0 ? '' : <span>row: {step.row}, col: {step.col}</span>}
+          </div>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
       )
