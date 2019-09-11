@@ -73,7 +73,7 @@ class Game extends React.Component {
     squares[i] = this.state.xIsNext ? 'X' : 'O';
 
     this.setState({
-      history: history.concat([{ squares }]),
+      history: history.concat([{ squares, row: Math.floor(i / 3), col: i % 3 }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
@@ -98,6 +98,7 @@ class Game extends React.Component {
         'Go to game start';
       return (
         <li key={move}>
+          {move === 0 ? '' : <span>row: {step.row}, col: {step.col}</span>}
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
       )
