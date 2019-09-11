@@ -6,7 +6,7 @@ class Square extends React.Component {
   render() {
     return (
       <button
-        className="square"
+        className={"square " + (this.props.isCurrentMove ? "bold" : "")}
         onClick={() => this.props.onClick()}
       >
         {this.props.value}
@@ -20,6 +20,7 @@ class Board extends React.Component {
   renderSquare(i) {
     return (
       <Square
+        isCurrentMove={i === this.props.history.slice(-1)[0].ind}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -55,6 +56,7 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+        row: -1, col: -1, ind: -1
       }],
       stepNumber: 0,
       xIsNext: true,
@@ -73,7 +75,7 @@ class Game extends React.Component {
     squares[i] = this.state.xIsNext ? 'X' : 'O';
 
     this.setState({
-      history: history.concat([{ squares, row: Math.floor(i / 3), col: i % 3 }]),
+      history: history.concat([{ squares, row: Math.floor(i / 3), col: i % 3, ind: i }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
@@ -116,6 +118,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
+            history={this.state.history}
             onClick={(i) => this.handleClick(i)}
           />
         </div>
